@@ -427,7 +427,7 @@ pj0ng.prototype.drawDashboard = function () {
   );
 
   if (this.debug) {
-    //this.ctx.fillText  ('Snaik:'+this.snaikIsRunning,100, this.canvas.height- 10);
+    // this.ctx.fillText  ('Snaik:'+this.snaikIsRunning,100, this.canvas.height- 10);
     this.ctx.fillText(
       "SnaikTopBottom:" + this.snaikBB.t + " " + this.snaikBB.b,
       10,
@@ -441,7 +441,6 @@ pj0ng.prototype.drawDashboard = function () {
 
     this.ctx.fillText("ballX:" + this.ballX, 10, this.canvas.height - 80);
     this.ctx.fillText("ballY:" + this.ballY, 10, this.canvas.height - 60);
-    // this.ctx.fillText("Time:" + this.currentTime, 10, this.canvas.height - 80);
   }
   return this;
 };
@@ -474,7 +473,7 @@ pj0ng.prototype.drawBricks = function () {
 
 pj0ng.prototype.paddleListener = function (e) {
   if (e.pageX > pj.mouseMin && e.pageX < pj.mouseMax)
-    pj.paddleX = e.pageX - pj.mouseMin;
+    pj.paddleX = e.pageX - pj.mouseMin - pj.paddleW / 2;
 };
 
 pj0ng.prototype.clear = function () {
@@ -494,10 +493,9 @@ pj0ng.prototype.tick = function () {
   this.currentTime = this.currentTime + 1;
   return this;
 };
-//draw things
+// draw things
 pj0ng.prototype.drawAll = function () {
   this.ballSpeed *= 1.00001;
-  //console.log(this.ballSpeed);
   if (this.brickCount == 0) {
     this.levelComplete();
     return this;
@@ -518,12 +516,12 @@ pj0ng.prototype.drawAll = function () {
     if (Math.floor(Math.random() * this.snaikSeed + 1) == 1)
       this.snaikIsRunning = 1;
   }
-  //detect brick collision
+  // detect brick collision
   rowH = this.brickH + this.brickS;
   colW = this.brickW + this.brickS;
   row = Math.floor(this.ballY / rowH);
   col = Math.floor(this.ballX / colW);
-  //remove brick if it was hit.
+  // remove brick if it was hit.
   if (
     this.ballY < this.brickRows * rowH &&
     row >= 0 &&
@@ -546,8 +544,8 @@ pj0ng.prototype.drawAll = function () {
     this.dY = -Math.floor(Math.random() * 15) + 1;
   }
 
-  //boundary collision detection
-  //reverse X-direction if ball is about to hit the left or right wall
+  // boundary collision detection
+  // reverse X-direction if ball is about to hit the left or right wall
   if (
     this.ballX + this.dX > this.xLimit ||
     this.ballX + this.dX < this.ballRadius
@@ -563,8 +561,7 @@ pj0ng.prototype.drawAll = function () {
       this.dX = Math.floor(
         15 * ((this.ballX - (this.paddleX + this.paddleW / 2)) / this.paddleW)
       );
-      //
-      //console.log(this.dX);
+      
       this.dY = -this.dY;
     } else {
       this.ballOut();
