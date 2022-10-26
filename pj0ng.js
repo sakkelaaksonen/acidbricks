@@ -65,6 +65,7 @@ var initGame = function () {
 
   //mouse listener
   document.addEventListener("mousemove", pj.paddleListener, false);
+  document.addEventListener("touchmove", pj.paddleListener, false);
 
   //draw & animate start menu
   pj.init();
