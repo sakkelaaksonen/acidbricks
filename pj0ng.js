@@ -1,5 +1,4 @@
 //HELPERS
-
 var levels = {};
 
 function circle(ctx, x, y, r) {
@@ -85,7 +84,9 @@ function startGame() {
 
 var pj0ng = function () {
   //canvas element & drawing context
-  this.fps = 30;
+  this.fps = 32;
+
+  this.currentTime = 0;
 
   this.canvas = document.getElementById("pj0ng");
   this.ctx = this.canvas.getContext("2d");
@@ -160,7 +161,7 @@ var pj0ng = function () {
   this.ufox = this.canvas.height / 2;
   this.ufoy = this.canvas.width / 2;
 
-  this.debug = 1;
+  this.debug = 0;
 };
 
 //kickstart
@@ -250,7 +251,7 @@ pj0ng.prototype.start = function () {
   clearInterval(this.drawEvent);
   if (!this.ballCount) return this;
 
-  this.drawEvent = setInterval("pj.drawAll()", 1000 / this.fps);
+  this.drawEvent = setInterval("pj.drawAll()", 1024 / this.fps);
   this.running = 1;
   this.snaikIsRunning = 1;
   return this;
@@ -418,6 +419,11 @@ pj0ng.prototype.drawDashboard = function () {
   this.ctx.textBaseline = "top";
   this.ctx.fillText("Balls:" + this.ballCount, 10, this.canvas.height - 10);
   this.ctx.fillText("Bricks:" + this.brickCount, 50, this.canvas.height - 10);
+  this.ctx.fillText(
+    "Time (frames):" + this.currentTime,
+    100,
+    this.canvas.height - 10
+  );
 
   if (this.debug) {
     //this.ctx.fillText  ('Snaik:'+this.snaikIsRunning,100, this.canvas.height- 10);
@@ -434,6 +440,7 @@ pj0ng.prototype.drawDashboard = function () {
 
     this.ctx.fillText("ballX:" + this.ballX, 10, this.canvas.height - 80);
     this.ctx.fillText("ballY:" + this.ballY, 10, this.canvas.height - 60);
+    // this.ctx.fillText("Time:" + this.currentTime, 10, this.canvas.height - 80);
   }
   return this;
 };
@@ -482,7 +489,10 @@ pj0ng.prototype.levelComplete = function () {
   this.ctx.fillText("Level Complete", 140, 160);
   setTimeout(initGame, 2000);
 };
-
+pj0ng.prototype.tick = function () {
+  this.currentTime = this.currentTime + 1;
+  return this;
+};
 //draw things
 pj0ng.prototype.drawAll = function () {
   this.ballSpeed *= 1.00001;
@@ -493,7 +503,13 @@ pj0ng.prototype.drawAll = function () {
   }
 
   var rowH, colW, row, col;
-  this.clear().drawBg().drawDashboard().drawBall().drawPad().drawBricks();
+  this.clear()
+    .tick()
+    .drawBg()
+    .drawDashboard()
+    .drawBall()
+    .drawPad()
+    .drawBricks();
 
   if (this.snaikIsRunning) {
     this.drawSnaik();
